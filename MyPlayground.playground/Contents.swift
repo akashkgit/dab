@@ -1,3 +1,2 @@
-import UIKit
-
-var greeting = "Hello, playground"
+var greeting:String? = nil// "Hello, playground"
+print(greeting?.count)

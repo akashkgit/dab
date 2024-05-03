@@ -15,6 +15,7 @@
 		6B35F7C12BE27F600075A590 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B35F7BF2BE27F600075A590 /* Main.storyboard */; };
 		6B35F7C32BE27F630075A590 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B35F7C22BE27F630075A590 /* Assets.xcassets */; };
 		6B35F7C62BE27F630075A590 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B35F7C42BE27F630075A590 /* LaunchScreen.storyboard */; };
+		6B35F7CD2BE281170075A590 /* MyTileSet.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6B35F7CC2BE281170075A590 /* MyTileSet.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,8 @@
 		6B35F7C02BE27F600075A590 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6B35F7C22BE27F630075A590 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6B35F7C52BE27F630075A590 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6B35F7CC2BE281170075A590 /* MyTileSet.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyTileSet.sks; sourceTree = "<group>"; };
+		6B35F7CE2BE2F5840075A590 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +46,7 @@
 		6B35F7A92BE27F5F0075A590 = {
 			isa = PBXGroup;
 			children = (
+				6B35F7CE2BE2F5840075A590 /* MyPlayground.playground */,
 				6B35F7B42BE27F5F0075A590 /* up */,
 				6B35F7B32BE27F5F0075A590 /* Products */,
 			);
@@ -67,6 +71,7 @@
 				6B35F7BF2BE27F600075A590 /* Main.storyboard */,
 				6B35F7C22BE27F630075A590 /* Assets.xcassets */,
 				6B35F7C42BE27F630075A590 /* LaunchScreen.storyboard */,
+				6B35F7CC2BE281170075A590 /* MyTileSet.sks */,
 			);
 			path = up;
 			sourceTree = "<group>";
@@ -129,6 +134,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B35F7CD2BE281170075A590 /* MyTileSet.sks in Resources */,
 				6B35F7C12BE27F600075A590 /* Main.storyboard in Resources */,
 				6B35F7B82BE27F5F0075A590 /* GameScene.sks in Resources */,
 				6B35F7C32BE27F630075A590 /* Assets.xcassets in Resources */,

@@ -9,80 +9,158 @@ import SpriteKit
 import GameplayKit
 
 class GameScene: SKScene {
-    
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    private var sprite:SKSpriteNode?
+    private var back:SKTileMapNode?
     
     override func didMove(to view: SKView) {
-        
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
+        print(" did move ")
+        if let back = childNode(withName: "rocks") as? SKTileMapNode {
+            self.back=back
+            physics()
         }
-        
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-        
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
+        addSprite()
+        let cameraNode = SKCameraNode()
             
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
+        cameraNode.position = CGPoint(x: 200, y: 0)
+        cameraNode.addChild(SKSpriteNode(color: .blue, size: CGSize(width: 20, height: 20)))
+        scene?.addChild(cameraNode)
+        scene?.camera = cameraNode
+        
+    }
+    func addSprite()->Void{
+        
+            sprite = childNode(withName: "sprite") as? SKSpriteNode
+            sprite?.physicsBody = SKPhysicsBody(rectangleOf: sprite!.size)
+            print("phy body ",sprite!.physicsBody)
+        sprite?.physicsBody?.categoryBitMask = 1
+        sprite?.anchorPoint = CGPoint(x:0.5,y:0.5)
+            sprite?.physicsBody?.isDynamic = true
+            sprite?.physicsBody?.contactTestBitMask = 2
+            sprite?.physicsBody?.collisionBitMask = 2
+//
+        
+        
+    }
+    
+    func physics()->Void{
+        let map = self.back!
+        let startLocation = map.position
+        let tileSize = map.tileSize
+        let hW = CGFloat(map.numberOfColumns) / 2.0 * tileSize.width
+        let hH = CGFloat(map.numberOfRows) / 2.0 * tileSize.height
+        
+        for col in 0..<map.numberOfColumns
+        {
+            for row in 0..<map.numberOfRows {
+                if let tileDef = map.tileDefinition(atColumn: col, row: row){
+                    let tileArray = tileDef.textures
+                    let tileText = tileArray[0]
+                    let x = CGFloat(col) * tileSize.width - hW + (tileSize.width/2)
+                    let y = CGFloat(row) * tileSize.height - hH + (tileSize.height/2)
+                    
+                    let tileNode = SKSpriteNode()
+                    tileNode.size = CGSizeMake(tileSize.width, tileSize.height)
+                    tileNode.position = CGPoint(x:x,y:y)
+                    tileNode.physicsBody = SKPhysicsBody(texture:tileText, size: CGSize(width:tileText.size().width, height:tileText.size().height))
+                    tileNode.physicsBody?.categoryBitMask = 2
+                    tileNode.physicsBody?.contactTestBitMask = 1
+                    tileNode.physicsBody?.collisionBitMask = 1
+                    tileNode.physicsBody?.affectedByGravity = false
+                    tileNode.physicsBody?.isDynamic = false
+                    tileNode.physicsBody?.friction = 1
+                    tileNode.zPosition = 29
+//                    tileNode.anchorPoint = .zero
+                    tileNode.position = CGPoint(x: tileNode.position.x + startLocation.x, y: tileNode.position.y + startLocation.y)
+                    self.addChild(tileNode)
+                }
+                    
+                    
+            }
         }
+        
     }
     
     
     func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
+//        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
+//            n.position = pos
+//            n.strokeColor = SKColor.green
+//            self.addChild(n)
+//        }
+//        sprite?.position = pos
+        let vect = CGVectorMake(0,150)
+        let vect2 = CGVectorMake(-50,0)
+        let vect3 = CGVectorMake(50,0)
+        print(" applying vect ",vect)
+        print( pos.x , sprite!.position.x )
+        if( pos.x <=  sprite!.position.x){
+            print(" applying x-ve\n")
+            guard sprite?.physicsBody?.applyImpulse(vect2) != nil else {
+                
+                print(" nilled 1",sprite!.physicsBody)
+                return
+            }
         }
+        if( pos.y >=  sprite!.position.y){
+            print(" applying y")
+            guard sprite?.physicsBody?.applyImpulse(vect) != nil else {
+                
+                print(" nilled 2",sprite!.physicsBody)
+                return
+            }
+        }
+        if( pos.x >=  sprite!.position.x){
+            print("applying x+ve")
+            guard sprite?.physicsBody?.applyImpulse(vect3) != nil else {
+                
+                print(" nilled 3",sprite!.physicsBody)
+                return
+            }
+        }
+        //print(sprite?.position, sprite?.physicsBody,sprite?.physicsBody?.velocity, sprite?.physicsBody?.isResting)
+        print("vel ",sprite?.physicsBody?.velocity)
+        
+        
     }
     
     func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
+//        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
+//            n.position = pos
+//            n.strokeColor = SKColor.blue
+//            self.addChild(n)
+//        }
     }
     
     func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
+//        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
+//            n.position = pos
+//            n.strokeColor = SKColor.red
+//            self.addChild(n)
+//        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-        }
         
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+//        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+//        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+//        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        
+//        camera?.position.x = sprite!.position.x
+//        camera?.position.y = sprite!.position.y
     }
 }
