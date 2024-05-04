@@ -8,15 +8,18 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     private var sprite:SKSpriteNode?
     private var back:SKTileMapNode?
-    
+    private var obstacles:[String] = ["rocks", "spikes"]
     override func didMove(to view: SKView) {
         print(" did move ")
-        if let back = childNode(withName: "rocks") as? SKTileMapNode {
-            self.back=back
-            physics()
+        physicsWorld.contactDelegate = self
+        for i in obstacles {
+            if let back = childNode(withName: i) as? SKTileMapNode {
+                self.back=back
+                physics(nodeName:i)
+            }
         }
         addSprite()
         let cameraNode = SKCameraNode()
@@ -52,7 +55,7 @@ class GameScene: SKScene {
         
     }
     
-    func physics()->Void{
+    func physics(nodeName name:String)->Void{
         let map = self.back!
         let startLocation = map.position
         let tileSize = map.tileSize
@@ -69,12 +72,13 @@ class GameScene: SKScene {
                     let y = CGFloat(row) * tileSize.height - hH + (tileSize.height/2)
                     
                     let tileNode = SKSpriteNode()
+                    tileNode.name = name
                     tileNode.size = CGSizeMake(tileSize.width, tileSize.height)
                     tileNode.position = CGPoint(x:x,y:y)
                     tileNode.physicsBody = SKPhysicsBody(texture:tileText, size: CGSize(width:tileText.size().width, height:tileText.size().height))
                     tileNode.physicsBody?.categoryBitMask = 2
-                    tileNode.physicsBody?.contactTestBitMask = 1
-                    tileNode.physicsBody?.collisionBitMask = 1
+//                    tileNode.physicsBody?.contactTestBitMask = 1
+//                    tileNode.physicsBody?.collisionBitMask = 1
                     tileNode.physicsBody?.affectedByGravity = false
                     tileNode.physicsBody?.isDynamic = false
                     tileNode.physicsBody?.friction = 1
@@ -171,6 +175,34 @@ class GameScene: SKScene {
         // Called before each frame is rendered
         
 //        camera?.position.x = sprite!.position.x
-//        camera?.position.y = sprite!.position.y
+        camera?.position.y = sprite!.position.y
     }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        let a = contact.bodyA.node?.name
+        let b = contact.bodyB.node?.name
+        if (a == "spikes" || b == "spikes") {
+            
+            let shockwave = SKShapeNode(circleOfRadius: 1)
+            shockwave.strokeColor = .white
+            shockwave.fillColor = .blue
+            
+
+            shockwave.position = contact.contactPoint
+            scene!.addChild(shockwave)
+            
+            shockwave.run(shockWaveAction)
+        }
+    }
+    let shockWaveAction: SKAction = {
+        let growAndFadeAction = SKAction.group([SKAction.scale(to: 50, duration: 0.5),
+                                                SKAction.fadeOut(withDuration: 0.5)])
+        
+        let sequence = SKAction.sequence([growAndFadeAction,
+                                          SKAction.removeFromParent()])
+        
+        return sequence
+    }()
+
+    
 }
