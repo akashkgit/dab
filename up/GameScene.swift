@@ -21,13 +21,22 @@ class GameScene: SKScene {
         addSprite()
         let cameraNode = SKCameraNode()
             
-        cameraNode.position = CGPoint(x: 200, y: 0)
+        cameraNode.position = CGPoint(x: 0, y: 0)
         cameraNode.addChild(SKSpriteNode(color: .blue, size: CGSize(width: 20, height: 20)))
         scene?.addChild(cameraNode)
         scene?.camera = cameraNode
         
     }
     func addSprite()->Void{
+        var texts:[SKTexture]? = Array()
+        for i in 1...10{
+            
+//            if(i == 4){continue}
+            if texts?.append(SKTexture(imageNamed: "w\(i)")) == nil {
+                print("\(i) nilled ")
+            }
+        }
+        let anim = SKAction.animate(with: texts!, timePerFrame: 0.1)
         
             sprite = childNode(withName: "sprite") as? SKSpriteNode
             sprite?.physicsBody = SKPhysicsBody(rectangleOf: sprite!.size)
@@ -37,6 +46,7 @@ class GameScene: SKScene {
             sprite?.physicsBody?.isDynamic = true
             sprite?.physicsBody?.contactTestBitMask = 2
             sprite?.physicsBody?.collisionBitMask = 2
+        sprite!.run(SKAction.repeatForever(anim))
 //
         
         
