@@ -1,8 +1,8 @@
 //
 //  GameViewController.swift
-//  up
+//  levels
 //
-//  Created by akash kumar on 5/1/24.
+//  Created by Srinidhi Sasidharan on 5/2/24.
 //
 
 import UIKit
@@ -10,30 +10,22 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController {
-    static var spritekitView:SKView?
+    
+    @IBAction func levelOneAction(_ sender: Any) {
+        let levelOneView = LevelOneViewController()
+        levelOneView.levelOneScreen()
+        self.present(levelOneView,animated: true,completion: nil)
+    }
+    
+
+    @IBAction func levelTwoAction(_ sender: Any) {
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let view = self.view as! SKView? {
-            // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "GameScene") {
-                // Set the scale mode to scale to fit the window
-                GameViewController.spritekitView = view
-                scene.scaleMode = .fill//                scene.anchorPoint = .init(x: 0.5, y: 0.5)
-//                scene.anchorPoint = CGPointMake(1,1)
-//                scene.size = CGSize(width: 100, height: 100)
-                // Present the scene
-                print(" scene anchor point", scene.anchorPoint)
-                view.presentScene(scene)
-            }
-            
-            view.ignoresSiblingOrder = true
-            
-            view.showsFPS = true
-            view.showsNodeCount = true
-        }
     }
-
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return .allButUpsideDown
@@ -41,7 +33,7 @@ class GameViewController: UIViewController {
             return .all
         }
     }
-
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
