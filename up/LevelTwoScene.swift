@@ -72,11 +72,11 @@ class LevelTwoScene: SKScene, SKPhysicsContactDelegate {
             log?.physicsBody?.isDynamic = true
             //log?.physicsBody?.contactTestBitMask = id.bricks.rawValue
         
-        log?.physicsBody?.contactTestBitMask = id.bricks.rawValue | id.sprite.rawValue
+        log?.physicsBody?.contactTestBitMask = id.bricks.rawValue | id.sprite.rawValue | id.movers.rawValue
         log?.physicsBody?.categoryBitMask = id.rocks.rawValue
         log?.physicsBody?.collisionBitMask = id.bricks.rawValue | id.movers.rawValue
         log?.physicsBody?.affectedByGravity = false
-            log?.physicsBody?.velocity = CGVector(dx: -300, dy: 10)
+            log?.physicsBody?.velocity = CGVector(dx: -300, dy: 0)
         
         log?.physicsBody?.allowsRotation = false
         log?.physicsBody?.linearDamping = 0
@@ -103,10 +103,10 @@ class LevelTwoScene: SKScene, SKPhysicsContactDelegate {
         
             log?.anchorPoint = CGPoint(x:0.5,y:0.5)
             log?.physicsBody?.isDynamic = true
-            log?.physicsBody?.contactTestBitMask = 4 | 1
-        log?.physicsBody?.collisionBitMask = id.bricks.rawValue
+            log?.physicsBody?.contactTestBitMask = id.bricks.rawValue | id.rocks.rawValue
+        log?.physicsBody?.collisionBitMask = id.bricks.rawValue | id.rocks.rawValue
         log?.physicsBody?.affectedByGravity = false
-            log?.physicsBody?.velocity = CGVector(dx: -100, dy: 0)
+            log?.physicsBody?.velocity = CGVector(dx: -300, dy: 0)
         log?.physicsBody?.allowsRotation = false
         log?.physicsBody?.linearDamping = 0
         
@@ -315,18 +315,46 @@ class LevelTwoScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         let a = contact.bodyA.node?.name
         let b = contact.bodyB.node?.name
-        print("Inside didbegin",a,b)
+        //print("Inside didbegin",a,b)
         if( ["falls"].contains(a) && ["rock1","rock2","rock3","rock4","rock5"].contains(b)  ){
-            print("Inside didbegin if")
+            //print("Inside didbegin if")
             var vel = contact.bodyA.node?.physicsBody?.velocity
             contact.bodyA.node!.physicsBody!.velocity = CGVector(dx: -1 * vel!.dx, dy: vel!.dy)
             
             vel = contact.bodyB.node?.physicsBody?.velocity
 //            ("\(b) \(-1 * vel!.dx)")
-            contact.bodyB.node!.physicsBody!.applyImpulse(dx: vel?.dx < 0 ?? -100 : 100 , dy:vel!.dy)
-            print(" collision \(b) \(-1 * vel!.dx) - ",contact.bodyB.node!.physicsBody!.velocity)
+            print("before",vel?.dx, vel?.dy)
+            contact.bodyB.node!.physicsBody!.velocity = (CGVector(dx: (vel?.dx)! < 0 ? -200 : 200 , dy:vel!.dy))
+            print(" collision",contact.bodyB.node!.physicsBody!.velocity)
             return
         }
+        
+        if( ["falls"].contains(a) && ["Log1","Log3","Log4","Log5"].contains(b)  ){
+            //print("Inside didbegin if")
+            var vel = contact.bodyA.node?.physicsBody?.velocity
+            contact.bodyA.node!.physicsBody!.velocity = CGVector(dx: -1 * vel!.dx, dy: vel!.dy)
+            
+            vel = contact.bodyB.node?.physicsBody?.velocity
+//            ("\(b) \(-1 * vel!.dx)")
+            print("before",vel?.dx, vel?.dy)
+            contact.bodyB.node!.physicsBody!.velocity = (CGVector(dx: (vel?.dx)! < 0 ? -200 : 200 , dy:vel!.dy))
+            print(" collision",contact.bodyB.node!.physicsBody!.velocity)
+            return
+        }
+        
+        if( ["rock1","rock2","rock3","rock4","rock5"].contains(b) && ["Log1","Log3","Log4","Log5"].contains(a)  ){
+            //print("Inside didbegin if")
+            var vel = contact.bodyA.node?.physicsBody?.velocity
+            contact.bodyA.node!.physicsBody!.velocity = (CGVector(dx: (vel?.dx)! < 0 ? -200 : 200 , dy:vel!.dy))
+            
+            vel = contact.bodyB.node?.physicsBody?.velocity
+//            ("\(b) \(-1 * vel!.dx)")
+            print("before",vel?.dx, vel?.dy)
+            contact.bodyB.node!.physicsBody!.velocity = (CGVector(dx: (vel?.dx)! < 0 ? -200 : 200 , dy:vel!.dy))
+            print(" collision",contact.bodyB.node!.physicsBody!.velocity)
+            return
+        }
+        
         
     }
     
