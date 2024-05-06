@@ -25,6 +25,7 @@ enum id: UInt32{
     case blade = 6
     case life = 8
     case coin = 16
+    case spikes = 32
     
     
 }
@@ -43,6 +44,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var curState: spriteState = spriteState.idle
     private var prevState: spriteState? = nil
     private var hurtEffect = SKEmitterNode(fileNamed: "hurt")
+    private var spikeEffect = SKEmitterNode(fileNamed: "hurt")
     let audioCoin = SKAudioNode(fileNamed: "bg.mp3")
     private var spriteJump:SKSpriteNode?
     private var back:SKTileMapNode?
@@ -50,13 +52,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var runAnim : SKAction = SKAction()
     private var idleAnim : SKAction = SKAction()
     private var updateTime:TimeInterval = 0
-    private var obstacles:[String] = ["rocks"]
+    private var spikesTime:TimeInterval = 0
+    private var obstacles:[String] = ["rocks","newRocks"]
     private var moversLst:[SKSpriteNode] = Array()
     private var bladeLst:[SKSpriteNode] = Array()
     private var bladeHLst:[SKSpriteNode] = Array()
     private var coinLst:[SKSpriteNode] = Array()
     private var rodLst:[SKSpriteNode] = Array()
-    
+    private var moversStrLst = ["mover1","mover2","mover3","mover4"]
+    private var bladeStrLst = ["bb1"]
+    private var coinStrLst = ["c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12"]
+    private var hbladeStrLst = ["bb2"]
     private var stats:gameStats = gameStats(score:0, scoreNode: SKLabelNode(fontNamed: "Chalkduster"), life:3, lifeNode: SKLabelNode(fontNamed: "Chalkduster"))
     override func didMove(to view: SKView) {
 //        (" did move ")
@@ -69,20 +75,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 physics(nodeName:i)
             }
         }
+        spikes(nodeName: "s1")
         addSprite()
-        for i in ["mover1","mover2","mover3","mover4"] {
+        for i in moversStrLst{
             addMovers(i)
         }
-        for i in ["bb1"] {
+        for i in bladeStrLst {
             addblade(i)
         }
-        for i in ["bb2"] {
+        for i in hbladeStrLst{
             addHBlade(i)
         }
         for i in ["l1" ] {
             addLife(i)
         }
-        for i in ["c1","c2","c3","c4","c5","c6","c7"]{
+        for i in coinStrLst{
             addCoin(i)
         }
         let cameraNode = SKCameraNode()
@@ -211,7 +218,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             spriteStat?.physicsBody?.mass = 20
             spriteStat?.anchorPoint = CGPoint(x:0.5,y:0.5)
             spriteStat?.physicsBody?.isDynamic = true
-        spriteStat?.physicsBody?.contactTestBitMask = 2 | id.coin.rawValue | id.life.rawValue | id.blade.rawValue
+        spriteStat?.physicsBody?.contactTestBitMask = id.coin.rawValue | id.life.rawValue | id.blade.rawValue | id.spikes.rawValue
         spriteStat?.physicsBody?.collisionBitMask = 2 | 4 | id.coin.rawValue | id.blade.rawValue
             spriteStat!.run(SKAction.repeatForever(idleAnim))
         
@@ -276,7 +283,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let movers = childNode(withName: name!) as? SKSpriteNode
         
         movers?.physicsBody = SKPhysicsBody(rectangleOf: movers!.size)
-            ("phy body ",movers!.physicsBody)
+//            ("phy body ",movers!.physicsBody)
         movers?.scale(to: CGSize(width: 32, height: 32))
         movers?.physicsBody?.categoryBitMask = id.coin.rawValue
         
@@ -317,32 +324,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     
                     let tileNode = SKSpriteNode()
                     
-                    if (name == "drums" ){
-                        map.setTileGroup(nil, forColumn: col, row: row)
-                        tileNode.texture = tileText
-                     
-                    }
                     tileNode.name = name
                     tileNode.size = CGSizeMake(tileSize.width, tileSize.height)
                     tileNode.position = CGPoint(x:x,y:y)
                     tileNode.physicsBody = SKPhysicsBody(texture:tileText, size: CGSize(width:tileText.size().width, height:tileText.size().height))
-                    tileNode.physicsBody?.categoryBitMask = 2
-//                    tileNode.physicsBody?.contactTestBitMask = 1
+                    tileNode.physicsBody?.categoryBitMask = id.bricks.rawValue
+                    tileNode.physicsBody?.contactTestBitMask = id.movers.rawValue | id.blade.rawValue
                     tileNode.physicsBody?.collisionBitMask = id.life.rawValue
                     tileNode.physicsBody?.affectedByGravity = false
                     tileNode.physicsBody?.isDynamic = false
                     tileNode.physicsBody?.friction = 1
                     tileNode.zPosition = 29
-                    
-                    if(name == "drums"){
-                        tileNode.physicsBody?.isDynamic = true
-                        tileNode.physicsBody?.mass = 10
-                        tileNode.physicsBody?.allowsRotation = false
-                        tileNode.physicsBody?.affectedByGravity = true
-                        ("\(tileNode.physicsBody) drummed")
-//                        tileNode.blendMode = SKBlendMode.replace
-                        
-                    }
+                  
 //                    tileNode.anchorPoint = .zero
                     tileNode.position = CGPoint(x: tileNode.position.x + startLocation.x, y: tileNode.position.y + startLocation.y)
                     self.addChild(tileNode)
@@ -353,6 +346,51 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
     }
+    
+    
+    func spikes(nodeName name:String)->Void{
+        let map = childNode(withName: name) as! SKTileMapNode
+        let startLocation = map.position
+        let tileSize = map.tileSize
+        let hW = CGFloat(map.numberOfColumns) / 2.0 * tileSize.width
+        let hH = CGFloat(map.numberOfRows) / 2.0 * tileSize.height
+        
+        for col in 0..<map.numberOfColumns
+        {
+            for row in 0..<map.numberOfRows {
+                if let tileDef = map.tileDefinition(atColumn: col, row: row){
+                    
+                    let tileArray = tileDef.textures
+                    let tileText = name == "drums" ?SKTexture(imageNamed: "t4") : tileArray[0]
+                    let x = CGFloat(col) * tileSize.width - hW + (tileSize.width/2)
+                    let y = CGFloat(row) * tileSize.height - hH + (tileSize.height/2)
+                    
+                    let tileNode = SKSpriteNode()
+                    tileNode.name = name
+                    tileNode.size = CGSizeMake(tileSize.width, tileSize.height)
+                    tileNode.position = CGPoint(x:x,y:y)
+                    tileNode.physicsBody = SKPhysicsBody(texture:tileText, size: CGSize(width:tileText.size().width, height:tileText.size().height))
+                    tileNode.physicsBody?.categoryBitMask = id.spikes.rawValue
+//                    tileNode.physicsBody?.contactTestBitMask = 1
+//                    tileNode.physicsBody?.collisionBitMask = id.life.rawValue
+                    tileNode.physicsBody?.affectedByGravity = false
+                    tileNode.physicsBody?.isDynamic = false
+                    tileNode.physicsBody?.friction = 1
+                    tileNode.zPosition = 29
+                    
+                    
+                  
+//                    tileNode.anchorPoint = .zero
+                    tileNode.position = CGPoint(x: tileNode.position.x + startLocation.x, y: tileNode.position.y + startLocation.y)
+                    self.addChild(tileNode)
+                }
+                    
+                    
+            }
+        }
+        
+    }
+    
     
     
     func touchDown(atPoint pos : CGPoint) {
@@ -548,21 +586,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        let a = contact.bodyA.node?.name
-        let b = contact.bodyB.node?.name
-        if (a == "spikes" || b == "spikes") {
-            
-            let shockwave = SKShapeNode(circleOfRadius: 1)
-            shockwave.strokeColor = .white
-            shockwave.fillColor = .blue
-            
-
-            shockwave.position = contact.contactPoint
-            scene!.addChild(shockwave)
-            
-            shockwave.run(shockWaveAction)
-            return
-        }
+        var a = contact.bodyA.node?.name
+        var b = contact.bodyB.node?.name
+//        if (a == "spikes" || b == "spikes") {
+//            
+//            let shockwave = SKShapeNode(circleOfRadius: 1)
+//            shockwave.strokeColor = .white
+//            shockwave.fillColor = .blue
+//            
+//
+//            shockwave.position = contact.contactPoint
+//            scene!.addChild(shockwave)
+//            
+//            shockwave.run(shockWaveAction)
+//            return
+//        }
         
         if( ["mover1","mover2","mover3"].contains(a) && ["mover1","mover2","mover3"].contains(b)  ){
             
@@ -575,7 +613,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             return
         }
         
-        if( (["c1","c2","c3","c4","c5","c6","c7"].contains(a) && "sprite" == b) || (["c1","c2","c3","c4","c5","c6","c7"].contains(b) && "sprite" == a)  ){
+        if( (coinStrLst.contains(a!) && "sprite" == b) || (coinStrLst.contains(b!) && "sprite" == a)  ){
             let coin = a == "sprite" ? contact.bodyB.node : contact.bodyA.node
             let spriteNode = a == "sprite" ? contact.bodyA.node : contact.bodyB.node
             
@@ -612,9 +650,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             return
         }
-        print("\(a)-\(b) : \(bladeTime) \(updateTime)")
+        
         if(( (["bb1","bb2"].contains(a) && "sprite" == b) || (["bb1","bb2"].contains(b) && "sprite" == a)  )  && (abs((bladeTime - updateTime)) > 2 )){
-            print("\(a)-\(b) : \(bladeTime) \(updateTime) --> caught")
+            //print("\(a)-\(b) : \(bladeTime) \(updateTime) --> caught")
             let blade = a == "sprite" ? contact.bodyB.node : contact.bodyA.node
             let spriteNode = a == "sprite" ? contact.bodyA.node : contact.bodyB.node
             
@@ -627,8 +665,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             run(sound)
 //            life?.removeFromParent()
             hurtEffect?.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),SKAction.removeFromParent()]))
+            return
         }
         
+        if(( (["s1"].contains(a) && "sprite" == b) || (["s1"].contains(b) && "sprite" == a)  )  && (abs((spikesTime - updateTime)) > 2 )){
+            
+            let blade = a == "sprite" ? contact.bodyB.node : contact.bodyA.node
+            let spriteNode = a == "sprite" ? contact.bodyA.node : contact.bodyB.node
+            
+            spikeEffect?.position = contact.contactPoint
+            addChild(spikeEffect!)
+            stats.life = stats.life - 1
+            stats.lifeNode.text = "Life: \(stats.life)"
+            spikesTime = updateTime
+            var sound=SKAction.group([SKAction.changeVolume(to: 0, duration: 4), SKAction.playSoundFileNamed("wrong", waitForCompletion: false)])
+            run(sound)
+//            life?.removeFromParent()
+            spikeEffect?.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),SKAction.removeFromParent()]))
+            return
+        }
+//        print("\(a)-\(b) : \(bladeTime) \(updateTime)")
+    a=a!
+        b=b!
+        if( (a == "rocks" || b == "rocks") && (bladeStrLst.contains(a!) ||  bladeStrLst.contains(b!) ||  moversStrLst.contains(a!) || moversStrLst.contains(b!) || hbladeStrLst.contains(a!) || hbladeStrLst.contains(b!))){
+            print("\(a)-\(b) --> caught")
+            let bladeRmovers: SKNode = (a == "rocks" ? contact.bodyB.node : contact.bodyA.node)!
+            let rockNode: SKNode = (a == "rocks" ? contact.bodyA.node : contact.bodyB.node)!
+            
+            switch(bladeRmovers.name){
+            case _ where moversStrLst.contains(bladeRmovers.name!) || bladeStrLst.contains(bladeRmovers.name!):
+                bladeRmovers.physicsBody?.velocity.dx = bladeRmovers.physicsBody!.velocity.dx  * -1
+            case _ where hbladeStrLst.contains(bladeRmovers.name!) :
+                bladeRmovers.physicsBody?.velocity.dy = bladeRmovers.physicsBody!.velocity.dy  * -1
+            default:
+                print("case exhausted")
+                
+            }
+            
+        }
     }
     let shockWaveAction: SKAction = {
         let growAndFadeAction = SKAction.group([SKAction.scale(to: 50, duration: 0.5),
@@ -642,3 +716,4 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     
 }
+

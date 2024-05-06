@@ -46,6 +46,7 @@
 		6B68D0942BE7DAD3008FEB0A /* bg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bg.mp3; sourceTree = "<group>"; };
 		6B68D0962BE7DBAB008FEB0A /* hurt.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = hurt.sks; sourceTree = "<group>"; };
 		6B68D0982BE7ECED008FEB0A /* wrong.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = wrong.mp3; sourceTree = "<group>"; };
+		6B68D09A2BE80E5A008FEB0A /* up.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = up.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +87,7 @@
 		6B35F7B42BE27F5F0075A590 /* up */ = {
 			isa = PBXGroup;
 			children = (
+				6B68D09A2BE80E5A008FEB0A /* up.entitlements */,
 				6B07B8F52BE60041002282B0 /* New Group */,
 				6B35F7B52BE27F5F0075A590 /* AppDelegate.swift */,
 				6B35F7B72BE27F5F0075A590 /* GameScene.sks */,
@@ -342,6 +344,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = up/up.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3J24V7F753;
@@ -370,6 +373,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = up/up.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3J24V7F753;

@@ -9,8 +9,11 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
+import WebKit
 class GameViewController: UIViewController {
     static var spritekitView:SKView?
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
