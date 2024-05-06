@@ -25,6 +25,7 @@ enum id: UInt32{
     case blade = 6
     case life = 8
     case coin = 16
+    case rocks = 32
     
     
 }

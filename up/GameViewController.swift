@@ -19,6 +19,9 @@ class GameViewController: UIViewController {
     
 
     @IBAction func levelTwoAction(_ sender: Any) {
+        let levelTwoView = LevelTwoViewController()
+        levelTwoView.levelTwoScreen()
+        self.present(levelTwoView,animated: true,completion: nil)
     }
     
     override func viewDidLoad() {
