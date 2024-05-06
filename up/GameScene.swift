@@ -26,6 +26,7 @@ enum id: UInt32{
     case life = 8
     case coin = 16
     case spikes = 32
+    case win = 64
     
     
 }
@@ -48,6 +49,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let audioCoin = SKAudioNode(fileNamed: "bg.mp3")
     private var spriteJump:SKSpriteNode?
     private var back:SKTileMapNode?
+    private var win:SKSpriteNode?
     private var bladeTime:TimeInterval = 0
     private var runAnim : SKAction = SKAction()
     private var idleAnim : SKAction = SKAction()
@@ -59,13 +61,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var bladeHLst:[SKSpriteNode] = Array()
     private var coinLst:[SKSpriteNode] = Array()
     private var rodLst:[SKSpriteNode] = Array()
-    private var moversStrLst = ["mover1","mover2","mover3","mover4"]
+    private var moversStrLst = ["mover1","mover2","mover3","mover4"]//, "mover5","mover6","mover7"]
     private var bladeStrLst = ["bb1"]
-    private var coinStrLst = ["c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12"]
+    private var coinStrLst = ["c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13"]
     private var hbladeStrLst = ["bb2"]
+    private var lStrLst = ["l1" , "l2"]
     private var stats:gameStats = gameStats(score:0, scoreNode: SKLabelNode(fontNamed: "Chalkduster"), life:3, lifeNode: SKLabelNode(fontNamed: "Chalkduster"))
     override func didMove(to view: SKView) {
 //        (" did move ")
+        
+        let end = childNode(withName: "END") as! SKLabelNode
+        end.text = " END OF LEVEL 1"
         audioCoin.autoplayLooped = false
         addChild(audioCoin)
         physicsWorld.contactDelegate = self
@@ -77,6 +83,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         spikes(nodeName: "s1")
         addSprite()
+        addWin()
         for i in moversStrLst{
             addMovers(i)
         }
@@ -86,7 +93,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for i in hbladeStrLst{
             addHBlade(i)
         }
-        for i in ["l1" ] {
+        for i in lStrLst {
             addLife(i)
         }
         for i in coinStrLst{
@@ -113,9 +120,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         stats.scoreNode.position = CGPoint(x: frame.width/2 - 5 - stats.scoreNode.frame.width , y:frame.height/2 - 50)
         scene!.camera!.addChild(stats.scoreNode)
         scene!.camera!.addChild(stats.lifeNode)
-        print("scene : \(frame.height) - \(frame.midY) camera \(scene?.camera?.frame.height) \(scene?.camera?.frame.midY)")
+        // // print("scene : \(frame.height) - \(frame.midY) camera \(scene?.camera?.frame.height) \(scene?.camera?.frame.midY)")
         
-        
+        print(" did move done ")
         
     }
     
@@ -163,14 +170,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     func addMovers(_ name:String?) -> Void{
         
-        var texts:[SKTexture]? = Array()
+//        var texts:[SKTexture]? = Array()
         
         
-        
+        let startIdx = name?.startIndex
+        let numberIdx = name?.index(after:(name?.index(startIdx!, offsetBy: 4))!)
             let movers = childNode(withName: name!) as? SKSpriteNode
-        movers?.texture = SKTexture(imageNamed: "floaters1")
+        // print(name)
+        // print(numberIdx)
+        
+        let num = Int(name![numberIdx!...])
+        movers?.texture = (num!) > 5 ?  SKTexture(imageNamed: "floaters1") : SKTexture(imageNamed: "floaters1")
         movers?.physicsBody = SKPhysicsBody(texture: movers!.texture!, size: movers!.texture!.size())
-            ("phy body ",movers!.physicsBody)
+//            ("phy body ",movers!.physicsBody)
             movers?.physicsBody?.categoryBitMask = 4
         
             movers?.anchorPoint = CGPoint(x:0.5,y:0.5)
@@ -218,9 +230,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             spriteStat?.physicsBody?.mass = 20
             spriteStat?.anchorPoint = CGPoint(x:0.5,y:0.5)
             spriteStat?.physicsBody?.isDynamic = true
+        spriteStat?.physicsBody?.node?.zPosition = 100
         spriteStat?.physicsBody?.contactTestBitMask = id.coin.rawValue | id.life.rawValue | id.blade.rawValue | id.spikes.rawValue
-        spriteStat?.physicsBody?.collisionBitMask = 2 | 4 | id.coin.rawValue | id.blade.rawValue
+        spriteStat?.physicsBody?.collisionBitMask = 2 | 4 | id.coin.rawValue | id.blade.rawValue | id.spikes.rawValue
             spriteStat!.run(SKAction.repeatForever(idleAnim))
+        
+//
+        
+        
+    }
+    func addWin()->Void{
+        
+        
+        let spriteStat = childNode(withName: "win") as? SKSpriteNode
+        self.win = spriteStat
+            spriteStat?.physicsBody = SKPhysicsBody(rectangleOf: spriteStat!.size)
+            ("phy body ",spriteStat!.physicsBody)
+        spriteStat?.texture = SKTexture(imageNamed: "win")
+        spriteStat?.physicsBody?.categoryBitMask = id.win.rawValue
+            
+        spriteStat?.physicsBody?.affectedByGravity = true
+            spriteStat?.anchorPoint = CGPoint(x:0.5,y:0.5)
+            spriteStat?.physicsBody?.isDynamic = true
+//        spriteStat?.physicsBody?.contactTestBitMask = id.coin.rawValue | id.life.rawValue | id.blade.rawValue | id.spikes.rawValue
+        spriteStat?.physicsBody?.collisionBitMask = 2 | 4 | id.coin.rawValue | id.bricks.rawValue
+//            spriteStat!.run(SKAction.repeatForever(idleAnim))
         
 //
         
@@ -234,7 +268,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for i in 1...5{
             
 //            if(i == 4){continue}
-            if texts?.append(SKTexture(imageNamed: "l1\(i)")) == nil {
+            let text = SKTexture(imageNamed: "l\(i)")
+            
+            if texts?.append(text) == nil {
                 ("\(i) nilled ")
             }
         }
@@ -244,7 +280,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let movers = childNode(withName: name!) as? SKSpriteNode
         
         movers?.physicsBody = SKPhysicsBody(rectangleOf: movers!.size)
-            ("phy body ",movers!.physicsBody)
+            ("phy body ",movers?.physicsBody)
         movers?.physicsBody?.categoryBitMask = id.life.rawValue
         
             movers?.anchorPoint = CGPoint(x:0.5,y:0.5)
@@ -330,7 +366,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     tileNode.physicsBody = SKPhysicsBody(texture:tileText, size: CGSize(width:tileText.size().width, height:tileText.size().height))
                     tileNode.physicsBody?.categoryBitMask = id.bricks.rawValue
                     tileNode.physicsBody?.contactTestBitMask = id.movers.rawValue | id.blade.rawValue
-                    tileNode.physicsBody?.collisionBitMask = id.life.rawValue
+                    tileNode.physicsBody?.collisionBitMask = id.life.rawValue | id.win.rawValue
                     tileNode.physicsBody?.affectedByGravity = false
                     tileNode.physicsBody?.isDynamic = false
                     tileNode.physicsBody?.friction = 1
@@ -403,10 +439,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let vect = CGVectorMake(0,9550)
         let vect2 = CGVectorMake(-3550,0)
         let vect3 = CGVectorMake(3550,0)
-        (" applying vect ",vect)
-        ( pos.x , spriteStat!.position.x )
+    
         if( pos.x <=  spriteStat!.position.x){
-            (" applying x-ve\n")
+            
             guard spriteStat?.physicsBody?.applyImpulse(vect2) != nil else {
                 
                 (" nilled 1",spriteStat!.physicsBody)
@@ -414,7 +449,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         if( pos.y >=  spriteStat!.position.y){
-            (" applying y")
+            
             guard spriteStat?.physicsBody?.applyImpulse(vect) != nil else {
                 spriteStat?.removeAllActions()
                 spriteStat!.run(SKAction.repeatForever(runAnim))
@@ -435,15 +470,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
            
         }
         if( pos.x >=  spriteStat!.position.x){
-            ("applying x+ve")
+            
             guard spriteStat?.physicsBody?.applyImpulse(vect3) != nil else {
                 
-                (" nilled 3",spriteStat!.physicsBody)
+                print(" nilled 3",spriteStat!.physicsBody)
                 return
             }
         }
         //(sprite?.position, sprite?.physicsBody,sprite?.physicsBody?.velocity, sprite?.physicsBody?.isResting)
-        ("vel ",spriteStat?.physicsBody?.velocity)
+        
         
         
     }
@@ -487,7 +522,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //        if(sprite!.position.y >  camera!.position.y){
 //        let msg = "\(spriteStat?.physicsBody?.velocity.dy, priva)"
-        
+//        
         updateTime = currentTime
         ("\(spriteStat?.physicsBody?.velocity.dy):dy \(curState) \(prevState)")
         if( spriteStat!.physicsBody!.velocity.dy <= 10  && curState == .jump){
@@ -497,13 +532,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             prevState =  curState
             curState = .idle
         }
-        if ((spriteStat!.position.y) > 50){
-            camera?.position.y = spriteStat!.position.y
+//        // print("\(win!.position.y) - \(spriteStat!.position.y) = \(win!.position.y -  spriteStat!.position.y)  ")
+        if(win!.position.y -  spriteStat!.position.y > 200) {
+            // print("\(win!.position.y) - \(spriteStat!.position.y) = \(win!.position.y -  spriteStat!.position.y)  ")
+            if ((spriteStat!.position.y) > 50){
+                camera?.position.y = spriteStat!.position.y
+            }
+            else {
+                camera?.position.y = 0
+            }
         }
-        else {
-            camera?.position.y = 0
-        }
-        
         let getlBound = {
             let sW = self.scene!.size.width
             let hW = sW/2
@@ -572,7 +610,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //            ("\(node.physicsBody?.velocity) \(node.name!) \(node.position.x) \(getlBound(node.size.width)) \(node.size.width)")
 //            else if (i.position.x <= node.size.width / 2){ node.physicsBody.velocity = CGVectorMake(-1 * node.physicsBody.velocity.dx,node.physicsBody.velocity.y)}
             if (node.position.y <= getLowBound(node) || node.position.y > getUBound(node)){
-//                print("*** Y--OOB \(node.name) \(node.physicsBody?.velocity) \(node.physicsBody?.linearDamping)****")
+//                // print("*** Y--OOB \(node.name) \(node.physicsBody?.velocity) \(node.physicsBody?.linearDamping)****")
                 ("** YOOB ***")
                 node.physicsBody!.velocity = CGVectorMake(1 * node.physicsBody!.velocity.dx,-1 * node.physicsBody!.velocity.dy)
             }
@@ -589,15 +627,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var a = contact.bodyA.node?.name
         var b = contact.bodyB.node?.name
 //        if (a == "spikes" || b == "spikes") {
-//            
+//
 //            let shockwave = SKShapeNode(circleOfRadius: 1)
 //            shockwave.strokeColor = .white
 //            shockwave.fillColor = .blue
-//            
+//
 //
 //            shockwave.position = contact.contactPoint
 //            scene!.addChild(shockwave)
-//            
+//
 //            shockwave.run(shockWaveAction)
 //            return
 //        }
@@ -626,7 +664,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             
 //            guard GameViewController.spritekitView?.scene?.addChild(audioCoin) != nil else {
-//                print (" issue loading audio ")
+//                // print (" issue loading audio ")
 //                return
 //            }
             
@@ -636,9 +674,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //            audio.
             return
         }
-//        print("\(a)-\(b)")
-        if( (["l1","l2","l3","l4"].contains(a) && "sprite" == b) || (["l1","l2","l3","l4","l5","l6","l7"].contains(b) && "sprite" == a)  ){
-            print("\(a)-\(b) -->caught")
+//        // print("\(a)-\(b)")
+        if( (lStrLst.contains(a!) && "sprite" == b) || (lStrLst.contains(b!) && "sprite" == a)  ){
+            // print("\(a)-\(b) -->caught")
             let life = a == "sprite" ? contact.bodyB.node : contact.bodyA.node
             let spriteNode = a == "sprite" ? contact.bodyA.node : contact.bodyB.node
             
@@ -652,7 +690,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if(( (["bb1","bb2"].contains(a) && "sprite" == b) || (["bb1","bb2"].contains(b) && "sprite" == a)  )  && (abs((bladeTime - updateTime)) > 2 )){
-            //print("\(a)-\(b) : \(bladeTime) \(updateTime) --> caught")
+            //// print("\(a)-\(b) : \(bladeTime) \(updateTime) --> caught")
             let blade = a == "sprite" ? contact.bodyB.node : contact.bodyA.node
             let spriteNode = a == "sprite" ? contact.bodyA.node : contact.bodyB.node
             
@@ -684,11 +722,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             spikeEffect?.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),SKAction.removeFromParent()]))
             return
         }
-//        print("\(a)-\(b) : \(bladeTime) \(updateTime)")
+//        // print("\(a)-\(b) : \(bladeTime) \(updateTime)")
     a=a!
         b=b!
         if( (a == "rocks" || b == "rocks") && (bladeStrLst.contains(a!) ||  bladeStrLst.contains(b!) ||  moversStrLst.contains(a!) || moversStrLst.contains(b!) || hbladeStrLst.contains(a!) || hbladeStrLst.contains(b!))){
-            print("\(a)-\(b) --> caught")
+            // print("\(a)-\(b) --> caught")
             let bladeRmovers: SKNode = (a == "rocks" ? contact.bodyB.node : contact.bodyA.node)!
             let rockNode: SKNode = (a == "rocks" ? contact.bodyA.node : contact.bodyB.node)!
             
@@ -698,7 +736,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             case _ where hbladeStrLst.contains(bladeRmovers.name!) :
                 bladeRmovers.physicsBody?.velocity.dy = bladeRmovers.physicsBody!.velocity.dy  * -1
             default:
-                print("case exhausted")
+                // print("case exhausted")
+                break
                 
             }
             
