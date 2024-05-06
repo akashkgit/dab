@@ -27,6 +27,7 @@ enum id: UInt32{
     case coin = 16
     case spikes = 32
     case win = 64
+    case rocks = 128
     
     
 }

@@ -23,7 +23,6 @@
 		6B68D0952BE7DAD3008FEB0A /* bg.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6B68D0942BE7DAD3008FEB0A /* bg.mp3 */; };
 		6B68D0972BE7DBAB008FEB0A /* hurt.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6B68D0962BE7DBAB008FEB0A /* hurt.sks */; };
 		6B68D0992BE7ECED008FEB0A /* wrong.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6B68D0982BE7ECED008FEB0A /* wrong.mp3 */; };
-		D879485C2BE856DB001B20D1 /* Controllers in Resources */ = {isa = PBXBuildFile; fileRef = D879485B2BE856DB001B20D1 /* Controllers */; };
 		D879485E2BE85B62001B20D1 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879485D2BE85B62001B20D1 /* GameViewController.swift */; };
 		D87948602BE85B65001B20D1 /* LevelOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879485F2BE85B65001B20D1 /* LevelOneViewController.swift */; };
 		D87948622BE85D2D001B20D1 /* LevelTwoScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D87948612BE85D2D001B20D1 /* LevelTwoScene.sks */; };
@@ -50,7 +49,6 @@
 		6B68D0942BE7DAD3008FEB0A /* bg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bg.mp3; sourceTree = "<group>"; };
 		6B68D0962BE7DBAB008FEB0A /* hurt.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = hurt.sks; sourceTree = "<group>"; };
 		6B68D0982BE7ECED008FEB0A /* wrong.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = wrong.mp3; sourceTree = "<group>"; };
-		D879485B2BE856DB001B20D1 /* Controllers */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Controllers; sourceTree = "<group>"; };
 		D879485D2BE85B62001B20D1 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		D879485F2BE85B65001B20D1 /* LevelOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelOneViewController.swift; sourceTree = "<group>"; };
 		D87948612BE85D2D001B20D1 /* LevelTwoScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LevelTwoScene.sks; sourceTree = "<group>"; };
@@ -89,8 +87,6 @@
 		6B35F7B42BE27F5F0075A590 /* up */ = {
 			isa = PBXGroup;
 			children = (
-				6B68D09A2BE80E5A008FEB0A /* up.entitlements */,
-				6B07B8F52BE60041002282B0 /* New Group */,
 				6B35F7B52BE27F5F0075A590 /* AppDelegate.swift */,
 				6B35F7B72BE27F5F0075A590 /* GameScene.sks */,
 				6B35F7B92BE27F5F0075A590 /* Actions.sks */,
@@ -98,7 +94,6 @@
 				6B35F7BF2BE27F600075A590 /* Main.storyboard */,
 				D879485D2BE85B62001B20D1 /* GameViewController.swift */,
 				D879485F2BE85B65001B20D1 /* LevelOneViewController.swift */,
-				D879485B2BE856DB001B20D1 /* Controllers */,
 				6B35F7C22BE27F630075A590 /* Assets.xcassets */,
 				6B35F7C42BE27F630075A590 /* LaunchScreen.storyboard */,
 				6B35F7CC2BE281170075A590 /* MyTileSet.sks */,
@@ -180,7 +175,6 @@
 				6B68D0992BE7ECED008FEB0A /* wrong.mp3 in Resources */,
 				6B35F7CD2BE281170075A590 /* MyTileSet.sks in Resources */,
 				6B35F7C12BE27F600075A590 /* Main.storyboard in Resources */,
-				D879485C2BE856DB001B20D1 /* Controllers in Resources */,
 				6B07B8EC2BE5AF8D002282B0 /* b1.sks in Resources */,
 				6B68D0952BE7DAD3008FEB0A /* bg.mp3 in Resources */,
 				6B68D0972BE7DBAB008FEB0A /* hurt.sks in Resources */,
@@ -359,7 +353,7 @@
 				CODE_SIGN_ENTITLEMENTS = up/up.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8YWATHKM2F;
+				DEVELOPMENT_TEAM = 3J24V7F753;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -372,7 +366,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = nidhiworks.com.up;
+				PRODUCT_BUNDLE_IDENTIFIER = akasharchives.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -388,7 +382,7 @@
 				CODE_SIGN_ENTITLEMENTS = up/up.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8YWATHKM2F;
+				DEVELOPMENT_TEAM = 3J24V7F753;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -401,7 +395,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = nidhiworks.com.up;
+				PRODUCT_BUNDLE_IDENTIFIER = akasharchives.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
