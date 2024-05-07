@@ -37,4 +37,7 @@ class LevelTwoViewController: UIViewController {
     func EndScreen(){
         self.performSegue(withIdentifier: "end", sender: self)
     }
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
 }

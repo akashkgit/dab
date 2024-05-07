@@ -43,14 +43,15 @@ class LevelTwoScene: SKScene, SKPhysicsContactDelegate {
     private var waterBallLst:[String] = Array()
     private var gemLst:[String] = Array()
     var timer:Int = 13
-    let gems = ["gem1":10,"gem2":2,"gem3":3,"gem4":5,"gem5":4,"gem6":6,"gem7":8,"gem8":9,"gem9":7,"gem10":5,"gem11":7,"gem12":13,"gem13":14,"gem14":4,"gem15":7]
-    private var stats:gameStats = gameStats(score:0, scoreNode: SKLabelNode(fontNamed: "Chalkduster"), life:0, lifeNode: SKLabelNode(fontNamed: "Chalkduster"))
+    let gems = ["gem1":10,"gem2":18,"gem3":10,"gem4":12,"gem5":10,"gem6":11,"gem7":12,"gem8":10,"gem9":7,"gem10":12,"gem11":13,"gem12":4,"gem13":10,"gem14":12,"gem15":11,"gem16":10]
+    private var stats:gameStats = gameStats(score:0, scoreNode: SKLabelNode(fontNamed: "Chalkduster"), life:20, lifeNode: SKLabelNode(fontNamed: "Chalkduster"))
     let gameEnd = SKLabelNode(fontNamed: "Chalkduster")
     func countDown(){
         timer -= 1
         for (key,value) in gems{
             if(value == timer){
-                if let gemNode = self.childNode(withName: "gem\(timer)") as? SKSpriteNode {
+                print("gems disappears")
+                if let gemNode = self.childNode(withName: key) as? SKSpriteNode {
                     gemNode.removeFromParent()
                 }
             }
@@ -184,7 +185,7 @@ class LevelTwoScene: SKScene, SKPhysicsContactDelegate {
         log?.physicsBody?.contactTestBitMask =  id.sprite.rawValue
    
         log?.physicsBody?.affectedByGravity = false
-            log?.physicsBody?.velocity = CGVector(dx: -50, dy: 0)
+            log?.physicsBody?.velocity = CGVector(dx: -100, dy: 0)
         //log?.physicsBody?.friction = 1
         log?.physicsBody?.allowsRotation = false
         //log?.physicsBody?.linearDamping = 0
@@ -640,7 +641,8 @@ class LevelTwoScene: SKScene, SKPhysicsContactDelegate {
             if( (waterBallLst.contains(a!) && "sprite" == b) || (waterBallLst.contains(b!) && "sprite" == a)  ){
                 let coin = a == "sprite" ? contact.bodyB.node : contact.bodyA.node
                 let spriteNode = a == "sprite" ? contact.bodyA.node : contact.bodyB.node
-                
+                stats.life = stats.life - 1
+                stats.lifeNode.text = "Life: \(stats.life)"
                 stats.score = stats.score - 10
                 stats.scoreNode.text = "Score: \(stats.score)"
                 coin?.removeFromParent()
@@ -666,7 +668,8 @@ class LevelTwoScene: SKScene, SKPhysicsContactDelegate {
             if( ("fieryWater" == a && "sprite" == b) || ("fieryWater" == b && "sprite" == a)  ){
                 let coin = a == "sprite" ? contact.bodyB.node : contact.bodyA.node
                 let spriteNode = a == "sprite" ? contact.bodyA.node : contact.bodyB.node
-                
+                stats.life = stats.life - 1
+                stats.lifeNode.text = "Life: \(stats.life)"
                 stats.score = stats.score - 20
                 stats.scoreNode.text = "Score: \(stats.score)"
                 coin?.removeFromParent()
@@ -680,7 +683,8 @@ class LevelTwoScene: SKScene, SKPhysicsContactDelegate {
             if( ("waterNode" == a && "sprite" == b) || ("waterNode" == b && "sprite" == a)  ){
                 let coin = a == "sprite" ? contact.bodyB.node : contact.bodyA.node
                 let spriteNode = a == "sprite" ? contact.bodyA.node : contact.bodyB.node
-                
+                stats.life = stats.life - 1
+                stats.lifeNode.text = "Life: \(stats.life)"
                 stats.score = stats.score - 20
                 stats.scoreNode.text = "Score: \(stats.score)"
                 coin?.removeFromParent()
@@ -694,6 +698,23 @@ class LevelTwoScene: SKScene, SKPhysicsContactDelegate {
             if( ("win" == a && "sprite" == b) || ("win" == b && "sprite" == a)  && won == false ){
                 print("I won")
                 won = true
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+                let vc : EndGameViewController = storyboard.instantiateViewController(withIdentifier: "EndGameViewController") as! EndGameViewController
+                vc.score = String(stats.score)
+                vc.view.frame = (self.view?.frame)!
+
+                vc.view.layoutIfNeeded()
+
+                UIView.transition(with: self.view!, duration: 0.3, options: .transitionFlipFromRight, animations:
+
+                {
+                self.view?.window?.rootViewController = vc
+
+                }, completion: { completed in
+                    
+                })
+
                 
 //                let leveltwo = LevelTwoViewController()
 //                leveltwo.EndScreen()

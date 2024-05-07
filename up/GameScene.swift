@@ -38,7 +38,7 @@ struct gameStats{
     var score:Int
     var scoreNode:SKLabelNode
     
-    var life:Int = 3
+    var life:Int = 20
     var lifeNode:SKLabelNode
     var time = 0
     
@@ -49,6 +49,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var curState: spriteState = spriteState.idle
     private var prevState: spriteState? = nil
     private var hurtEffect = SKEmitterNode(fileNamed: "hurt")
+    private var deadEffect = SKEmitterNode(fileNamed: "dead")
     private var spikeEffect = SKEmitterNode(fileNamed: "hurt")
     let audioCoin = SKAudioNode(fileNamed: "bg.mp3")
     private var spriteJump:SKSpriteNode?
@@ -58,6 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var runAnim : SKAction = SKAction()
     private var idleAnim : SKAction = SKAction()
     private var updateTime:TimeInterval = 0
+    private var dead = false
     private var spikesTime:TimeInterval = 0
     private var obstacles:[String] = ["rocks","newRocks"]
     private var moversLst:[SKSpriteNode] = Array()
@@ -65,12 +67,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var bladeHLst:[SKSpriteNode] = Array()
     private var coinLst:[SKSpriteNode] = Array()
     private var rodLst:[SKSpriteNode] = Array()
-    private var moversStrLst = ["mover1","mover2","mover3","mover4"]//, "mover5","mover6","mover7"]
-    private var bladeStrLst = ["bb1"]
-    private var coinStrLst = ["c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13"]
-    private var hbladeStrLst = ["bb2"]
+    private var moversStrLst = ["mover2","mover3","mover4"]// "mover5", "mover6","mover7"]
+    private var bladeStrLst = ["bb1","bb3"]
+    private var coinStrLst = ["c1","c2","c3","c4","c5","c6","c7","c8","c9"]//,"c14","c15","c16","c17","c18","c19","c20"]
+    private var hbladeStrLst = ["bb2", "bb4"]
     private var lStrLst = ["l1" , "l2"]
-    private var stats:gameStats = gameStats(score:0, scoreNode: SKLabelNode(fontNamed: "Chalkduster"), life:3, lifeNode: SKLabelNode(fontNamed: "Chalkduster"))
+    private var stats:gameStats = gameStats(score:0, scoreNode: SKLabelNode(fontNamed: "Chalkduster"), life:8, lifeNode: SKLabelNode(fontNamed: "Chalkduster"))
     override func didMove(to view: SKView) {
 //        (" did move ")
         
@@ -235,7 +237,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             spriteStat?.anchorPoint = CGPoint(x:0.5,y:0.5)
             spriteStat?.physicsBody?.isDynamic = true
         spriteStat?.physicsBody?.node?.zPosition = 100
-        spriteStat?.physicsBody?.contactTestBitMask = id.coin.rawValue | id.life.rawValue | id.blade.rawValue | id.spikes.rawValue
+        spriteStat?.physicsBody?.contactTestBitMask = id.coin.rawValue | id.life.rawValue | id.blade.rawValue | id.spikes.rawValue | id.win.rawValue
         spriteStat?.physicsBody?.collisionBitMask = 2 | 4 | id.coin.rawValue | id.blade.rawValue | id.spikes.rawValue
             spriteStat!.run(SKAction.repeatForever(idleAnim))
         
@@ -431,7 +433,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    
+    private var touchCount = 5
     
     func touchDown(atPoint pos : CGPoint) {
 //        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
@@ -440,6 +442,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //            self.addChild(n)
 //        }
 //        sprite?.position = pos
+        touchCount -= 1
         let vect = CGVectorMake(0,9550)
         let vect2 = CGVectorMake(-3550,0)
         let vect3 = CGVectorMake(3550,0)
@@ -550,6 +553,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        let msg = "\(spriteStat?.physicsBody?.velocity.dy, priva)"
 //        
         updateTime = currentTime
+    
+        print(spriteStat!.position.y,"-", camera!.position.y,"-",scene!.size.height," half width ",scene!.size.height/2)
+        if( !dead && touchCount <= 0 && spriteStat!.position.y <  camera!.position.y - scene!.size.height/2){
+            dead = true
+            var pos = spriteStat!.position
+            pos.y +=  5
+            deadEffect?.position = pos
+            addChild(deadEffect!)
+            
+            
+            
+            var sound=SKAction.group([SKAction.changeVolume(to: 0, duration: 4), SKAction.playSoundFileNamed("wrong", waitForCompletion: false)])
+            run(sound)
+//            life?.removeFromParent()
+            deadEffect?.run(SKAction.sequence([SKAction.wait(forDuration: 1),SKAction.removeFromParent(),SKAction.run(extractedFunc) ]))
+            
+            
+            print(spriteStat!.position.y,"-", camera!.position.y,"-",scene!.size.height," half width ",scene!.size.height/2," --> caught")
+        }
         ("\(spriteStat?.physicsBody?.velocity.dy):dy \(curState) \(prevState)")
         if( spriteStat!.physicsBody!.velocity.dy <= 10  && curState == .jump){
             spriteStat?.removeAllActions()
@@ -561,11 +583,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        // print("\(win!.position.y) - \(spriteStat!.position.y) = \(win!.position.y -  spriteStat!.position.y)  ")
         if(win!.position.y -  spriteStat!.position.y > 200) {
             // print("\(win!.position.y) - \(spriteStat!.position.y) = \(win!.position.y -  spriteStat!.position.y)  ")
-            if ((spriteStat!.position.y) > 50){
-                camera?.position.y = spriteStat!.position.y
+            if ((spriteStat!.position.y) > 50 && touchCount <= 0 ){
+                camera?.position.y += 2
             }
             else {
-                camera?.position.y = 0
+                if (touchCount <= 0 ){
+                    camera?.position.y += 2
+                }
             }
         }
         let getlBound = {
@@ -649,9 +673,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    fileprivate func extractedFunc() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let vc : EndGameViewController = storyboard.instantiateViewController(withIdentifier: "EndGameViewController") as! EndGameViewController
+        vc.score = String(stats.score)
+        vc.view.frame = (self.view?.frame)!
+        
+        vc.view.layoutIfNeeded()
+        
+        UIView.transition(with: self.view!, duration: 0.3, options: .transitionFlipFromRight, animations:
+                            
+                            {
+            self.view?.window?.rootViewController = vc
+            
+        }, completion: { completed in
+            
+        })
+    }
+    
     func didBegin(_ contact: SKPhysicsContact) {
         var a = contact.bodyA.node?.name
         var b = contact.bodyB.node?.name
+        if( (a == "win" || b == "win") && (a == "sprite" || b == "sprite")){
+            
+            extractedFunc()
+
+        }
 //        if (a == "spikes" || b == "spikes") {
 //
 //            let shockwave = SKShapeNode(circleOfRadius: 1)
