@@ -22,14 +22,17 @@ enum id: UInt32{
     case sprite = 1
     case bricks  = 2
     case movers = 4
-    case blade = 6
+    case blade = 8192
     case life = 8
     case coin = 16
     case spikes = 32
     case win = 64
     case rocks = 128
-    
-    
+    case stationary = 256
+    case bridges = 512
+    case gems = 1024
+    case firewoods = 2048
+    case waterGems = 4096
 }
 struct gameStats{
     var score:Int
@@ -519,6 +522,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     override func update(_ currentTime: TimeInterval) {
+        if(stats.life <= 0){
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+            let vc : EndGameViewController = storyboard.instantiateViewController(withIdentifier: "EndGameViewController") as! EndGameViewController
+            vc.score = String(stats.score)
+            vc.view.frame = (self.view?.frame)!
+
+            vc.view.layoutIfNeeded()
+
+            UIView.transition(with: self.view!, duration: 0.3, options: .transitionFlipFromRight, animations:
+
+            {
+            self.view?.window?.rootViewController = vc
+
+            }, completion: { completed in
+                
+            })
+
+
+        }
+
         // Called before each frame is rendered
         
         //        if(sprite!.position.y >  camera!.position.y){

@@ -28,6 +28,8 @@
 		D87948622BE85D2D001B20D1 /* LevelTwoScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D87948612BE85D2D001B20D1 /* LevelTwoScene.sks */; };
 		D87948642BE86354001B20D1 /* LevelTwoScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87948632BE86354001B20D1 /* LevelTwoScene.swift */; };
 		D87948662BE863ED001B20D1 /* LevelTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87948652BE863ED001B20D1 /* LevelTwoViewController.swift */; };
+		D879488B2BE98C5E001B20D1 /* test.sks in Resources */ = {isa = PBXBuildFile; fileRef = D879488A2BE98C5E001B20D1 /* test.sks */; };
+		D879488F2BE9D858001B20D1 /* EndGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879488E2BE9D858001B20D1 /* EndGameViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +56,8 @@
 		D87948612BE85D2D001B20D1 /* LevelTwoScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LevelTwoScene.sks; sourceTree = "<group>"; };
 		D87948632BE86354001B20D1 /* LevelTwoScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelTwoScene.swift; sourceTree = "<group>"; };
 		D87948652BE863ED001B20D1 /* LevelTwoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelTwoViewController.swift; sourceTree = "<group>"; };
+		D879488A2BE98C5E001B20D1 /* test.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = test.sks; sourceTree = "<group>"; };
+		D879488E2BE9D858001B20D1 /* EndGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndGameViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,8 @@
 				D87948612BE85D2D001B20D1 /* LevelTwoScene.sks */,
 				D87948632BE86354001B20D1 /* LevelTwoScene.swift */,
 				D87948652BE863ED001B20D1 /* LevelTwoViewController.swift */,
+				D879488A2BE98C5E001B20D1 /* test.sks */,
+				D879488E2BE9D858001B20D1 /* EndGameViewController.swift */,
 			);
 			path = up;
 			sourceTree = "<group>";
@@ -177,6 +183,7 @@
 				6B35F7C12BE27F600075A590 /* Main.storyboard in Resources */,
 				6B07B8EC2BE5AF8D002282B0 /* b1.sks in Resources */,
 				6B68D0952BE7DAD3008FEB0A /* bg.mp3 in Resources */,
+				D879488B2BE98C5E001B20D1 /* test.sks in Resources */,
 				6B68D0972BE7DBAB008FEB0A /* hurt.sks in Resources */,
 				6B07B8F92BE600F6002282B0 /* MyParticle.sks in Resources */,
 				6B35F7B82BE27F5F0075A590 /* GameScene.sks in Resources */,
@@ -200,6 +207,7 @@
 				6B35F7B62BE27F5F0075A590 /* AppDelegate.swift in Sources */,
 				D87948642BE86354001B20D1 /* LevelTwoScene.swift in Sources */,
 				D87948662BE863ED001B20D1 /* LevelTwoViewController.swift in Sources */,
+				D879488F2BE9D858001B20D1 /* EndGameViewController.swift in Sources */,
 				D879485E2BE85B62001B20D1 /* GameViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -353,7 +361,7 @@
 				CODE_SIGN_ENTITLEMENTS = up/up.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3J24V7F753;
+				DEVELOPMENT_TEAM = 8YWATHKM2F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -366,7 +374,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = akasharchives.com;
+				PRODUCT_BUNDLE_IDENTIFIER = nidhiworks.com.up;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -382,7 +390,7 @@
 				CODE_SIGN_ENTITLEMENTS = up/up.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3J24V7F753;
+				DEVELOPMENT_TEAM = 8YWATHKM2F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -395,7 +403,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = akasharchives.com;
+				PRODUCT_BUNDLE_IDENTIFIER = nidhiworks.com.up;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

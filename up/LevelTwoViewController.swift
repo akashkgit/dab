@@ -33,4 +33,8 @@ class LevelTwoViewController: UIViewController {
             view.showsNodeCount = true
         }
     }
+    
+    func EndScreen(){
+        self.performSegue(withIdentifier: "end", sender: self)
+    }
 }

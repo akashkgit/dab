@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ReR-oK-gpK">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,7 +12,7 @@
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModule="up" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GameViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BV1-FR-VrT" customClass="GameViewController" customModule="up" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -73,6 +74,21 @@
             </objects>
             <point key="canvasLocation" x="64.885496183206101" y="-2.1126760563380285"/>
         </scene>
+        <!--Level Two View Controller-->
+        <scene sceneID="O4H-DU-cBe">
+            <objects>
+                <viewController id="ZhO-6G-Rpb" customClass="LevelTwoViewController" customModule="up" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="P8t-Af-8JH">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="oTG-j6-csg"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3Ve-xy-kkB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-368" y="-837"/>
+        </scene>
         <!--Level One View Controller-->
         <scene sceneID="hBT-JW-t5L">
             <objects>
@@ -86,11 +102,74 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NmA-lR-lKh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="784" y="23"/>
+            <point key="canvasLocation" x="819" y="-767"/>
+        </scene>
+        <!--End Game View Controller-->
+        <scene sceneID="mgK-Og-F8f">
+            <objects>
+                <viewController storyboardIdentifier="EndGameViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ReR-oK-gpK" customClass="EndGameViewController" customModule="up" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dgy-zY-6k0" customClass="End">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" contentMode="scaleAspectFit" fixedFrame="YES" image="gameOver" translatesAutoresizingMaskIntoConstraints="NO" id="I0c-aO-UeN">
+                                <rect key="frame" x="-102" y="-55" width="518" height="1027"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GAME OVER" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uog-ZH-Cyu">
+                                <rect key="frame" x="42" y="138" width="335" height="113"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" red="0.080658362019999999" green="0.66641169789999999" blue="0.57872977640000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="40"/>
+                                <color key="textColor" red="0.038352655563276973" green="0.32815863733298967" blue="0.28377564298765784" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                                <lineBreakStrategy key="lineBreakStrategy" pushOut="YES"/>
+                            </label>
+                            <imageView clipsSubviews="YES" contentMode="scaleAspectFit" fixedFrame="YES" image="arrow.circlepath" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="WFS-6B-REt">
+                                <rect key="frame" x="138" y="214" width="96" height="132"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" red="0.96841150522232056" green="0.66931532658644777" blue="0.099511685244533257" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" button="YES"/>
+                                </accessibility>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e8x-Pw-r0u">
+                                <rect key="frame" x="42" y="354" width="141" height="70"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" name="AccentColor"/>
+                                <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="38"/>
+                                <color key="textColor" red="0.99469178920000001" green="0.97767120600000001" blue="0.83905953170000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="highlightedColor" systemColor="tertiarySystemGroupedBackgroundColor"/>
+                                <color key="shadowColor" red="0.080658362019999999" green="0.66641169789999999" blue="0.57872977640000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mtq-e3-kPJ">
+                                <rect key="frame" x="224" y="364" width="120" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="63"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="SsH-2S-xvw"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <connections>
+                        <outlet property="retry" destination="WFS-6B-REt" id="r4K-uZ-ACL"/>
+                        <outlet property="scorelLabel" destination="Mtq-e3-kPJ" id="LaB-cI-2GT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ohj-Ge-vEk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-828.24427480916029" y="-27.464788732394368"/>
         </scene>
     </scenes>
     <resources>
+        <image name="arrow.circlepath" catalog="system" width="128" height="112"/>
         <image name="background" width="512" height="512"/>
+        <image name="gameOver" width="116.66666412353516" height="207.33332824707031"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
